@@ -6,14 +6,18 @@ var rollbar = new Rollbar({
   captureUncaught: true,
   captureUnhandledRejections: true,
 })
-rollbar.log('Hello world!')
-app.use(express.static('public'))
-app.use(express.json())
 
 app.get('/', function (req, res){
   res.sendFile(path.join(__dirname, '../public/index.html'))
   rollbar.log('html served')
 })
+
+
+
+app.use(express.static('public'))
+app.use(express.json())
+
+
 const students = ['Jimmy', 'Timothy', 'Jimothy']
 
 app.get('/api/students', (req, res) => {
@@ -27,20 +31,19 @@ app.post('/api/students', (req, res) => {
        return student === name
    })
 
-   try {
-       if (index === -1 && name !== '') {
-           students.push(name)
-           res.status(200).send(students)
-       } else if (name === ''){
-           res.status(400).send('You must enter a name.')
-       } else {
-           res.status(400).send('That student already exists.')
-       }
-   } catch (err) {
-       console.log(err)
-   }
-})
+   if(index === -1 && name !== ''){
+    students.push(name)
+    rollbar.log('Student added successfully', {author: 'Scott', type: 'manual entry'})
+    res.status(200).send(students)
+} else if (name === ''){
+    rollbar.error('No name given')
+    res.status(400).send('must provide a name.')
+} else {
+    rollbar.error('student already exists')
+    res.status(400).send('that student already exists')
+}
 
+})
 app.delete('/api/students/:index', (req, res) => {
     const targetIndex = +req.params.index
     students.splice(targetIndex, 1)
