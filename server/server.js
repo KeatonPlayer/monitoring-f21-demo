@@ -6,14 +6,6 @@ var rollbar = new Rollbar({
   captureUncaught: true,
   captureUnhandledRejections: true,
 })
-
-app.get('/', function (req, res){
-  res.sendFile(path.join(__dirname, '../public/index.html'))
-  rollbar.log('html served')
-})
-
-
-
 app.use(express.static('public'))
 app.use(express.json())
 
