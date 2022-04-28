@@ -12,7 +12,7 @@ app.use(express.json())
 
 app.get('/', function (req, res){
   res.sendFile(path.join(__dirname, '../public/index.html'))
-  rollbar.info('html serverd')
+  rollbar.log('html served')
 })
 const students = ['Jimmy', 'Timothy', 'Jimothy']
 
