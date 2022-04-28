@@ -1,13 +1,17 @@
 const express = require ('express')
 const app = express()
-let Rollbar = require('rollbar')
-let rollbar = new Rollbar({
+var Rollbar = require('rollbar')
+var rollbar = new Rollbar({
   accessToken: '74cec7add9b745f8b89797ead7674de3',
   captureUncaught: true,
   captureUnhandledRejections: true,
 })
-rollbar.log('Hello world!')
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../index.html'))
+    rollbar.info('file served')
+})
 
+rollbar.log('Hello world!')
 app.use(express.static('public'))
 const port  = process.env.PORT || 4005
 app.listen(port, function(){
