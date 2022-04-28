@@ -7,11 +7,13 @@ var rollbar = new Rollbar({
   captureUnhandledRejections: true,
 })
 rollbar.log('Hello world!')
-app.use(express.static('public'),
-rollbar.info('Files served'))
-
+app.use(express.static('public'))
 app.use(express.json())
 
+app.get('/', function (req, res){
+  res.sendFile(path.join(__dirname, '../public/index.html'))
+  rollbar.info('html serverd')
+})
 const students = ['Jimmy', 'Timothy', 'Jimothy']
 
 app.get('/api/students', (req, res) => {
