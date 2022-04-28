@@ -6,11 +6,6 @@ var rollbar = new Rollbar({
   captureUncaught: true,
   captureUnhandledRejections: true,
 })
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'))
-    rollbar.info('file served')
-})
-
 rollbar.log('Hello world!')
 app.use(express.static('public'))
 const port  = process.env.PORT || 4005
