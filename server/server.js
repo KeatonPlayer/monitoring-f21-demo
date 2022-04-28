@@ -7,7 +7,8 @@ var rollbar = new Rollbar({
   captureUnhandledRejections: true,
 })
 rollbar.log('Hello world!')
-app.use(express.static('public'))
+app.use(express.static('public'),
+rollbar.info('Files served'))
 
 app.use(express.json())
 
@@ -40,20 +41,11 @@ app.post('/api/students', (req, res) => {
 
 app.delete('/api/students/:index', (req, res) => {
     const targetIndex = +req.params.index
-    
     students.splice(targetIndex, 1)
     res.status(200).send(students)
 })
-
-
-
-
-
-
-
 
 const port  = process.env.PORT || 4005
 app.listen(port, function(){
 console.log(`Listening on da port that is ${port}`)
 })
-
